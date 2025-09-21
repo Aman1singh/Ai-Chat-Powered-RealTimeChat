@@ -26,7 +26,6 @@ app.use(express.json({ limit: "300kb" }));
 app.use(express.urlencoded({ limit: "300kb", extended: true }));
 
 // 2. Configure CORS to allow requests from your frontend.
-// In a real production app, you might want to restrict this further.
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "http://localhost:5173",
@@ -45,9 +44,9 @@ app.use("/api/ai", aiRoutes);
 
 // --- Production Deployment ---
 if (process.env.NODE_ENV === "production") {
-  // FIX: Changed "Frontend" to "frontend" to match common naming conventions
-  // and case-sensitive file systems on deployment servers.
-  const frontendDistPath = path.join(__dirname, "Frontend", "dist");
+  // FIX: Navigate UP one level ('..') from the Backend directory to find the frontend directory.
+  // Also, ensuring 'frontend' is lowercase.
+  const frontendDistPath = path.join(__dirname, "..", "Frontend", "dist");
 
   app.use(express.static(frontendDistPath));
 
@@ -61,6 +60,7 @@ server.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
   connectDB();
 });
+
 
 
 
