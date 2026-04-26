@@ -16,8 +16,9 @@ export const generateAiResponse = async (req, res) => {
             return res.status(500).json({ error: "AI API key not configured on the server." });
         }
         
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-
+        // const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+// Using gemini-2.5-flash
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         // --- THIS IS THE NEW, MORE SPECIFIC PROMPT ---
         // It strictly defines the AI's role and refusal behavior.
         const prompt = `

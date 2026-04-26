@@ -27,13 +27,17 @@
 // frontend/src/pages/HomePage.jsx (Corrected)
 
 import { useChatStore } from "../store/useChatStore";
+import { useGroupStore } from "../store/useGroupStore";
 import Sidebar from "../components/Sidebar";
 import NoChatSelected from "../components/NoChatSelected";
 import ChatContainer from "../components/ChatContainer";
+import GroupChatContainer from "../components/GroupChatContainer";
 
 const HomePage = () => {
-    // Use the correct state variable name: selectedConversation
     const { selectedConversation } = useChatStore();
+    const { selectedGroup } = useGroupStore();
+
+    const hasSelection = selectedConversation || selectedGroup;
 
     return (
         <div className="h-screen bg-base-200">
@@ -42,8 +46,13 @@ const HomePage = () => {
                     <div className="flex h-full rounded-lg overflow-hidden">
                         <Sidebar />
                         
-                        {/* Update the condition to use selectedConversation */}
-                        {!selectedConversation ? <NoChatSelected /> : <ChatContainer />}
+                        {!hasSelection ? (
+                            <NoChatSelected />
+                        ) : selectedGroup ? (
+                            <GroupChatContainer />
+                        ) : (
+                            <ChatContainer />
+                        )}
                     </div>
                 </div>
             </div>

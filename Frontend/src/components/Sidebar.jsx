@@ -92,29 +92,42 @@
 
 import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
+import { useGroupStore } from "../store/useGroupStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Users } from "lucide-react";
-import Conversations from "./Conversations"; // Import Conversations
+import { Users, Plus } from "lucide-react";
+import Conversations from "./Conversations";
+import GroupModal from "./GroupModal";
 
 const Sidebar = () => {
-    // We get users from the store, but the actual rendering is done in Conversations.jsx
     const { getUsers, isUsersLoading } = useChatStore();
+    const { getGroups } = useGroupStore();
     const { onlineUsers } = useAuthStore();
     const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+    const [showGroupModal, setShowGroupModal] = useState(false);
 
     useEffect(() => {
         getUsers();
-    }, [getUsers]);
+        getGroups();
+    }, [getUsers, getGroups]);
 
     if (isUsersLoading) return <SidebarSkeleton />;
 
     return (
         <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
             <div className="border-b border-base-300 w-full p-5">
-                <div className="flex items-center gap-2">
-                    <Users className="size-6" />
-                    <span className="font-medium hidden lg:block">Contacts</span>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <Users className="size-6" />
+                        <span className="font-medium hidden lg:block">Contacts</span>
+                    </div>
+                    <button
+                        onClick={() => setShowGroupModal(true)}
+                        className="btn btn-ghost btn-circle btn-sm"
+                        title="Create or Join Group"
+                    >
+                        <Plus className="size-5" />
+                    </button>
                 </div>
                 <div className="mt-3 hidden lg:flex items-center gap-2">
                     <label className="cursor-pointer flex items-center gap-2">
@@ -129,8 +142,8 @@ const Sidebar = () => {
                     <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
                 </div>
             </div>
-            {/* Render the Conversations component which contains the AI and users */}
             <Conversations showOnlineOnly={showOnlineOnly} />
+            {showGroupModal && <GroupModal onClose={() => setShowGroupModal(false)} />}
         </aside>
     );
 };
