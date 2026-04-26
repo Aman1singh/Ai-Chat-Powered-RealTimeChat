@@ -17,8 +17,14 @@ export const generateAiResponse = async (req, res) => {
         }
         
         // const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+<<<<<<< HEAD
 // Using gemini-2.5-flash
 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+=======
+        // Using gemini-2.5-flash
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+>>>>>>> 40b334f5769a2f7eacd176798cbe13b20e0c9d8a
         // --- THIS IS THE NEW, MORE SPECIFIC PROMPT ---
         // It strictly defines the AI's role and refusal behavior.
         const prompt = `
