@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 export const generateAiResponse = async (req, res) => {
     try {
-        const { message } = req.body;
+        const { message, history = [] } = req.body;
         const user = req.user;
 
         if (!message) {
@@ -16,39 +16,27 @@ export const generateAiResponse = async (req, res) => {
 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-        const prompt = `
-            You are a specialized AI assistant for a chat application. Your ONLY function is to help users format their messages to be more professional, clear, or polite.
+        // Build contents array with only last 2 history messages + current message
+        const contents = [];
 
-            RULES:
-            1.  If the user's message is a request to rephrase, correct, or improve a piece of text, you must provide the improved version and nothing else.
-            2.  If the user asks a question, tries to make small talk, or requests any information on any topic other than message formatting, you MUST respond with EXACTLY this sentence: "I can only assist with formatting messages. Please provide a message you would like me to improve."
-            3.  Do not greet the user or add any extra conversational text. Only provide the formatted message or the refusal message.
+        // Add last 2 history messages only
+        const recentHistory = history.slice(-2);
+        recentHistory.forEach((h) => {
+            contents.push({
+                role: h.role === "model" ? "model" : "user",
+                parts: [{ text: h.text }],
+            });
+        });
 
-            EXAMPLES:
-            - User input: "rephrase this for my boss: i cant come in today"
-            - Your correct response: "I will be unable to come in to work today."
+        // Add current user message with concise instruction
+        contents.push({
+            role: "user",
+            parts: [{
+                text: `You are a helpful AI assistant. Keep your response very short and concise (1-2 sentences max). Do not use bullet points or lists unless asked. Be direct and to the point.\n\nUser: ${message}`
+            }],
+        });
 
-            - User input: "fix grammar: he dont know what hes doing"
-            - Your correct response: "He doesn't know what he's doing."
-
-            - User input: "What is the capital of France?"
-            - Your correct response: "I can only assist with formatting messages. Please provide a message you would like me to improve."
-
-            - User input: "Hello, how are you?"
-            - Your correct response: "I can only assist with formatting messages. Please provide a message you would like me to improve."
-
-            Now, process the following user input based on these rules.
-            User's name: ${user.fullName}
-            User's message: "${message}"
-        `;
-
-        const payload = {
-            contents: [{
-                parts: [{
-                    text: prompt
-                }]
-            }]
-        };
+        const payload = { contents };
 
         const apiResponse = await fetch(apiUrl, {
             method: 'POST',
