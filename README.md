@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-  <em>A seamless, intelligent real-time chat application powered by the Gemini API, enabling intelligent conversations between users.</em>
+  <em>A seamless, intelligent real-time chat application powered by the Gemini API, enabling intelligent conversations between users and collaborative group coding sessions.</em>
 </p>
 
 <p align="center">
@@ -24,18 +24,23 @@
 -   🤖 **AI Integration:** Smart replies and message enhancements using the Google Gemini API.
 -   🔐 **User Authentication:** Secure sign-up and login functionality with JWT.
 -   📱 **Modern UI:** Sleek, responsive design built with React.js for a seamless experience on desktop and mobile.
--    scalability **Scalable Backend:** Built with Node.js/Express.js to support multiple users and conversations concurrently.
+-   🚀 **Scalable Backend:** Built with Node.js/Express.js to support multiple users and conversations concurrently.
+-   👥 **Group Collaboration:** Create or join collaborative coding groups using a unique Group ID and Passkey
+-   💻 **Real-Time Code Editing:** Multiple users can edit code simultaneously with live updates
+-   🎯 **Live Cursor Tracking:** See other users' cursor positions in real-time
+-   💬 **Group Chat:** Dedicated chat for group members during collaborative sessions
 
 ## 🛠️ Tech Stack
 
 | Category                | Technology                                                                          |
 | ----------------------- | ----------------------------------------------------------------------------------- |
-| **Frontend** | React.js, CSS                                                                       |
+| **Frontend** | React.js, CSS, Tailwind CSS                                                                       |
 | **Backend** | Node.js, Express.js                                                                 |
 | **Database** | MongoDB                                                                             |
 | **AI Services** | Gemini API                                                                          |
 | **Real-Time Engine** | Socket.IO, WebSockets                                                               |
 | **Authentication** | JSON Web Tokens (JWT)                                                               |
+| **State Management** | Zustand                                                                             |
 
 ## 🚀 Getting Started
 
@@ -52,25 +57,25 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/Aman1singh/Ai-Chat-Powered-RealTimeChat.git](https://github.com/Aman1singh/Ai-Chat-Powered-RealTimeChat.git)
+    git clone https://github.com/Aman1singh/Ai-Chat-Powered-RealTimeChat.git
     cd Ai-Chat-Powered-RealTimeChat
     ```
 
 2.  **Install server dependencies:**
     ```bash
-    cd server
+    cd Backend
     npm install
     ```
 
 3.  **Install client dependencies:**
     ```bash
-    cd ../client
+    cd ../Frontend
     npm install
     ```
 
 ### Environment Configuration
 
-1.  Navigate to the `server` directory.
+1.  Navigate to the `Backend` directory.
 2.  Create a `.env` file by copying the example file:
     ```bash
     cp .env.example .env
@@ -81,6 +86,7 @@ Follow these instructions to get a copy of the project up and running on your lo
     MONGO_URI=your_mongodb_connection_string
     JWT_SECRET=your_jwt_secret_key
     GEMINI_API_KEY=your_gemini_api_key
+    NODE_ENV=development
     ```
 
 ### Running the Application
@@ -96,12 +102,12 @@ You can run the frontend and backend servers concurrently from the root director
 2.  **Alternatively, run them in separate terminals:**
     ```bash
     # In one terminal, start the backend server
-    cd server
-    npm start
+    cd Backend
+    npm run dev
 
     # In another terminal, start the frontend client
-    cd client
-    npm start
+    cd Frontend
+    npm run dev
     ```
 
 3.  **Open your browser** and navigate to `http://localhost:3000`.
@@ -110,20 +116,61 @@ You can run the frontend and backend servers concurrently from the root director
 
 ```
 /
-├── client/         # Frontend React application
+├── Backend/                # Backend Node.js/Express application
+│   ├── src/
+│   │   ├── controllers/    # Route controllers
+│   │   ├── models/         # Mongoose database models (User, Message, Group, GroupMessage)
+│   │   ├── routes/         # Express API routes
+│   │   ├── lib/            # Socket.IO configuration
+│   │   └── index.js        # Main server entry point
+│   └── package.json
+├── Frontend/               # Frontend React application
 │   ├── public/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       └── App.js
-├── server/         # Backend Node.js/Express application
-│   ├── controllers/
-│   ├── models/     # Mongoose database models
-│   ├── routes/     # Express API routes
-│   ├── socket/     # Real-time logic with Socket.IO
-│   └── server.js   # Main server entry point
-├── .env.example    # Sample environment file
-└── package.json
+│   ├── src/
+│   │   ├── components/     # React components (Sidebar, Conversations, CodeEditor, GroupModal)
+│   │   ├── pages/          # Pages (HomePage, LoginPage, SignupPage)
+│   │   ├── store/          # Zustand stores (useAuthStore, useGroupStore)
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+└── README.md
+```
+
+## 👥 Group Collaboration Feature
+
+### Creating a Group
+
+1. Click the **"+Group"** button in the sidebar
+2. Choose **"Create New Group"**
+3. Enter a group name and set a passkey (password for group access)
+4. Share the **Group ID** and **Passkey** with team members
+
+### Joining a Group
+
+1. Click the **"+Group"** button in the sidebar
+2. Choose **"Join Existing Group"**
+3. Enter the **Group ID** and **Passkey** provided by the group creator
+4. Click join to start collaborating
+
+### Collaborative Code Editing
+
+- **Real-Time Updates:** Code changes are synchronized across all members instantly
+- **Live Cursor Tracking:** See other members' cursor positions highlighted in real-time
+- **Group Chat:** Communicate with team members in the dedicated group chat window
+- **Persistent Storage:** Code is saved in the database for future reference
+
+### How It Works
+
+```
+Group Flow:
+User A (Creator) → Creates Group with ID & Passkey
+                ↓
+User B, C (Members) → Join with ID & Passkey
+                    ↓
+                Real-Time WebSocket Connection (Socket.IO)
+                    ↓
+        Code Updates + Cursor Positions + Chat Messages
+        synchronized across all connected members
 ```
 
 ## 📸 Screenshots
@@ -131,13 +178,13 @@ You can run the frontend and backend servers concurrently from the root director
 <details>
 <summary>Click to view screenshots</summary>
 
-| Login Page                                                                                                   | Signup Page                                                                                                  |
-| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/user-attachments/assets/3802cf5f-a90c-4e56-a20b-a8590524ef54" alt="Login Page" /> | <img src="https://github.com/user-attachments/assets/0519d267-4f1e-4065-9c1f-7ba247889428" alt="Signup Page" /> |
+| Login Page                                                                                                   | Signup Page                                                                       |
+| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------|
+| <img src="https://github.com/user-attachments/assets/3802cf5f-a90c-4e56-a20b-a8590524ef54" alt="Login Page" /> | <img src="https://github.com/user-attachments/assets/0519d267-4f1e-4065-9c1f-7ba..." alt="Signup Page" /> |
 
-| AI Chat Interface                                                                                            | Chat in Action                                                                                               |
-| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/user-attachments/assets/3cd21228-73ff-4f3f-a8c3-3cab3ebb0ef4" alt="AI Chat" />     | <img src="https://github.com/user-attachments/assets/8c93fbf6-6f8a-44ee-8020-7e5fb71deb18" alt="Chat Test" />   |
+| AI Chat Interface                                                                                            | Chat in Action                                                                    |
+| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------|
+| <img src="https://github.com/user-attachments/assets/3cd21228-73ff-4f3f-a8c3-3cab3ebb0ef4" alt="AI Chat" />     | <img src="https://github.com/user-attachments/assets/8c93fbf6-6f8a-44ee-8020-7e..." alt="Chat" /> |
 
 </details>
 
