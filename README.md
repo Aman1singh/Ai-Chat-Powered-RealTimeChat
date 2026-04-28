@@ -1,4 +1,4 @@
-# AI-Powered Real-Time Chat
+# Together code+chat
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/0f97d9c8-bda6-4513-8f59-297283bc7600" alt="Home Page Screenshot" width="800"/>
